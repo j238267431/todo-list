@@ -1,0 +1,20 @@
+{% extends "/template.twig" %}
+{% block content %}
+
+<form action="/admin/update" method="POST">
+<input type="hidden" name="userId" value="{{user.id}}" />
+  <div class="form-group">
+    <label for="exampleInputEmail1">Описание</label>
+    <input name="task_description" value="{{ user.task_description }}" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+<div class="form-check">
+  <input {% if user.status == 1 %} name="status" checked {% endif %}  class="form-check-input" type="checkbox" value="1" id="defaultCheck1" name="status">
+  <label class="form-check-label" for="defaultCheck1">
+    Задача выполнена
+  </label>
+</div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}

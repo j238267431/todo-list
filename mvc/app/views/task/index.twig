@@ -1,0 +1,31 @@
+{% extends "/template.twig" %}
+{% block content %}
+<div class="container">
+<a href="/task/store" type="button" class="btn btn-primary">Создать задачу</a>
+{% if errorText %}<p class="alert alert-danger">{{ errorText }}</p>{% endif %}
+{% if successText %}<p class="alert alert-success">{{ successText }}</p>{% endif %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col"><div><span>название</span><a href="/home/index/sort/username/desc">&uarr;</a><a href="/home/index/sort/username/asc">&darr;</a></div></th>
+      <th scope="col"><div><span>описание</span><a href="/home/index/sort/task_description/desc">&uarr;</a><a href="/home/index/sort/task_description/asc">&darr;</a></div></th>
+      <th scope="col"><div><span>статус</span><a href="/home/index/sort/status/desc">&uarr;</a><a href="/home/index/sort/status/asc">&darr;</a></div></th>
+      {% if isAdmin %} <th>админ панель</th> {% endif %} 
+    </tr>
+  </thead>
+  <tbody>
+   {% for key, task in tasks %}
+      <tr>
+         <th scope="row">{{ key }}</th>
+         <td>{{ task.name }}</td>
+         <td>{{ task.description }}</td>
+         <td>{% if task.status == '' or task.status == 0 %} в процессе {% else %} завершена {% endif %}</td>
+         {% if isAdmin %} <td><a href="/admin/store/user/{{user.id}}">редактировать</a></td> {% endif %}  
+      </tr>
+   {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

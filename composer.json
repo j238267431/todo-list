@@ -1,0 +1,14 @@
+{
+    "require": {
+        "illuminate/database": "^11.34",
+        "laravel/serializable-closure": "^1.3",
+        "twig/twig": "^3.0",
+        "workerman/workerman": "^5.1"
+    },
+    "autoload": {
+      "classmap": [
+         "mvc/app/models"
+      ]
+    }
+
+}

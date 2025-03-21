@@ -1,0 +1,19 @@
+{% extends "/template.twig" %}
+{% block content %}
+{% if errorText %}<p class="alert alert-danger">{{ errorText }}</p>{% endif %}
+<div>
+  <h1>Форма регистрации нового пользователя</h1>
+</div>
+<form action="/register/register" method="POST">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Логин</label>
+    <input value="{{userName}}" name="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter name">
+    {# <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> #}
+  </div>
+  <div class="form-group mt-1">
+    <label for="exampleInputPassword1">Пароль</label>
+    <input name="password" value="{{password}}" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

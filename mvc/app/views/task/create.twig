@@ -1,0 +1,29 @@
+{% extends "/template.twig" %}
+{% block content %}
+<form action="/task/create" method="POST">
+
+  <div>
+    <h1>Создание задачи</h1>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Сотрудник</label>
+    <div class="input-group mb-3">
+      <select name="user" class="custom-select" id="inputGroupSelect02">
+        {% for user in users %}
+          <option name="user" value="{{ user.id }}" type="text" class="form-control" id="user" aria-describedby="user" placeholder="">{{ user.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+  </div>
+  <div class="form-group">
+    <label for="task_name">Название задачи</label>
+    <input name="task_name" value="{{ task.taskname }}" type="text" class="form-control" id="task_name" aria-describedby="task_name" placeholder="">
+  </div>
+  <div class="form-group">
+    <label for="task_description">Описание задачи</label>
+    <input name="task_description" value="{{ task.task_description }}" type="text" class="form-control" id="task_description" aria-describedby="task_description" placeholder="">
+  </div>
+  <button type="submit" class="btn btn-primary mt-2">Создать</button>
+</form>
+{% endblock %}
