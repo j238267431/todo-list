@@ -56,20 +56,22 @@ class TaskController extends Controller
       // } catch (\Illuminate\Database\QueryException $exception) {
       } catch(\Throwable $exception) {
          $errorInfo = $exception->getMessage();
-         var_dump($errorInfo);
+         // var_dump($errorInfo);
          $this->view('/home/index', ['errorText' => $errorInfo]);
       }
    }
-
-   public function send(){
-      var_dump('sendSocket');
-      $localsocket = 'tcp://127.0.0.1:1234';
-      $user = 'tester01';
-      $message = 'test';
-
-      // соединяемся с локальным tcp-сервером
-      $instance = stream_socket_client($localsocket);
-      // отправляем сообщение
-      fwrite($instance, json_encode(['user' => $user, 'message' => $message])  . "\n");
+   public function updateStatus($request)
+   {
+      try {
+         $task = Task::find($request['taskId']);
+         $status = $request['status'];
+         $task->update([
+            'status' => $status
+         ]);
+      } catch (\Throwable $exception) {
+         $errorInfo = $exception->getMessage();
+         // var_dump($errorInfo);
+         $this->view('/home/index', ['errorText' => $errorInfo]);
+      }
    }
 }

@@ -1,31 +1,65 @@
 {% extends "/template.twig" %}
 {% block content %}
-<div class="container">
+<div class="container" data-pageid="tasks">
 <a href="/task/store" type="button" class="btn btn-primary">Создать задачу</a>
 {% if errorText %}<p class="alert alert-danger">{{ errorText }}</p>{% endif %}
 {% if successText %}<p class="alert alert-success">{{ successText }}</p>{% endif %}
+<div class="container">
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col"><div><span>название</span><a href="/home/index/sort/username/desc">&uarr;</a><a href="/home/index/sort/username/asc">&darr;</a></div></th>
-      <th scope="col"><div><span>описание</span><a href="/home/index/sort/task_description/desc">&uarr;</a><a href="/home/index/sort/task_description/asc">&darr;</a></div></th>
-      <th scope="col"><div><span>статус</span><a href="/home/index/sort/status/desc">&uarr;</a><a href="/home/index/sort/status/asc">&darr;</a></div></th>
-      {% if isAdmin %} <th>админ панель</th> {% endif %} 
-    </tr>
-  </thead>
-  <tbody>
-   {% for key, task in tasks %}
-      <tr>
-         <th scope="row">{{ key }}</th>
-         <td>{{ task.name }}</td>
-         <td>{{ task.description }}</td>
-         <td>{% if task.status == '' or task.status == 0 %} в процессе {% else %} завершена {% endif %}</td>
-         {% if isAdmin %} <td><a href="/admin/store/user/{{user.id}}">редактировать</a></td> {% endif %}  
-      </tr>
-   {% endfor %}
-  </tbody>
-</table>
+    <div class="row  align-items-start mb-2">
+      <div class=" col">
+        <h3 >Новые</h3>
+      </div>
+          <div class=" col">
+        <h3 >В работе</h3>
+      </div>
+          <div class="crd col">
+        <h3 >Завершены</h3>
+      </div>
+    </div>
+
+  <div class="row align-items-start" >
+
+    <div id="new" class="col card" style="height: 100vh">
+
+      {% for key, task in tasks %}
+        {% if task.status == 'new' %}
+          {{ _self.createCard(task) }}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div id="progress" class="col card" style="height: 100vh">
+      {% for key, task in tasks %}
+        {% if task.status == 'progress' %}
+          {{ _self.createCard(task) }}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div id="completed" class="col card" style="height: 100vh">
+      {% for key, task in tasks %}
+        {% if task.status == 'completed' %}
+          {{ _self.createCard(task) }}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
 </div>
+</div>
+
+
+{% macro createCard(task) %}
+    <div class="card mt-2" style="width: 19rem;" data-cardid="{{task.id}}">
+      <div class="card-body">
+        <h5 class="card-title">{{task.name}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6>
+        <p class="card-text">{{task.description}}</p>
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+      </div>
+    </div>
+{% endmacro %}
+
+
+
 {% endblock %}
+
