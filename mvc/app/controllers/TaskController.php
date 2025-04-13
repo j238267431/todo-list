@@ -1,21 +1,26 @@
 <?php
-
+use App\Traits\FlashMessages;
 class TaskController extends Controller
 {
+   use FlashMessages;
    protected $task;
+   protected $stage;
 
    public function __construct()
    {
       $this->task = $this->model('Task');
+      $this->stage = $this->model('stage');
    }
 
    public function index()
    {
-      // var_dump($_SESSION);
+
+      $message = $this->flash();
+      
       if(isset($_SESSION['user']) && $_SESSION['user']['id'] != '' ){
          $userId = $_SESSION['user']['id'];
          $isAdmin = false;
-
+         $stages = Stage::orderBy('order', 'ASC')->get();
          if(isset($_SESSION['user']['is_admin']) && $_SESSION['user']['is_admin']){
             $isAdmin = true;
             $tasks = Task::all();
@@ -23,14 +28,15 @@ class TaskController extends Controller
             $tasks = Task::where('user_id', '=', $userId)->get();
          }
          
-         $this->view('/task/index', ['tasks' => $tasks, 'isAdmin' => $isAdmin]);
+         $this->view('/task/index', ['tasks' => $tasks, 'isAdmin' => $isAdmin, 'stages' => $stages, 'message' => $message]);
       }   
    }
 
    public function store()
    {
       $users = User::all();
-      $this->view('/task/create', ['users' => $users]);
+      $stages = Stage::all();
+      $this->view('/task/create', ['users' => $users, 'stages' => $stages]);
    }
 
    public function create($request)
@@ -41,6 +47,7 @@ class TaskController extends Controller
          $task = $user->tasks()->create([
             'name' => $request['task_name'],
             'description' => $request['task_description'],
+            'stage_id' => $request['stage'],
          ]);
          
          $tasks = Task::all();
@@ -48,15 +55,17 @@ class TaskController extends Controller
          if(isset($_SESSION['user']['is_admin']) && $_SESSION['user']['is_admin']){
             $isAdmin = true;
          }
+         $stages = Stage::orderBy('order', 'ASC')->get();
          if($task){
-            $this->view('/task/index', ['successText' => 'Задача успешно создана', 'tasks' => $tasks, 'isAdmin' => $isAdmin]);
+            $this->flash(['success' => 'Задача успешно создана']);
+            header('Location: '.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/task/index');
          } else {
-            $this->view('/task/index', ['errorText' => 'Задача не создана', 'tasks' => $tasks, 'isAdmin' => $isAdmin ]);
+            $this->flash(['error' =>'Задача не создана']);
+            header('Location: '.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/task/index');
          }
       // } catch (\Illuminate\Database\QueryException $exception) {
       } catch(\Throwable $exception) {
          $errorInfo = $exception->getMessage();
-         // var_dump($errorInfo);
          $this->view('/home/index', ['errorText' => $errorInfo]);
       }
    }
@@ -66,11 +75,10 @@ class TaskController extends Controller
          $task = Task::find($request['taskId']);
          $status = $request['status'];
          $task->update([
-            'status' => $status
+            'stage_id' => $status // ToDo
          ]);
       } catch (\Throwable $exception) {
          $errorInfo = $exception->getMessage();
-         // var_dump($errorInfo);
          $this->view('/home/index', ['errorText' => $errorInfo]);
       }
    }

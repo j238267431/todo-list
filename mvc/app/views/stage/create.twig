@@ -1,0 +1,14 @@
+{% extends "/template.twig" %}
+{% block content %}
+<form action="/stage/create" method="POST">
+
+  <div>
+    <h1>Создание колонки</h1>
+  </div>
+  <div class="form-group">
+    <label for="stage_name">Название стадии</label>
+    <input name="stage_name" value="{{ stage.name }}" type="text" class="form-control" id="stage_name" aria-describedby="task_name" placeholder="">
+  </div>
+  <button type="submit" class="btn btn-primary mt-2">Создать</button>
+</form>
+{% endblock %}

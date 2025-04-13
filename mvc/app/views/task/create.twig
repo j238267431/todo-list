@@ -24,6 +24,14 @@
     <label for="task_description">Описание задачи</label>
     <input name="task_description" value="{{ task.task_description }}" type="text" class="form-control" id="task_description" aria-describedby="task_description" placeholder="">
   </div>
+  <label for="stages">Стадии</label>
+    <div class="input-group mb-3">
+      <select name="stage" class="custom-select" id="inputGroupSelect02">
+        {% for stage in stages %}
+          <option name="stage" value="{{ stage.id }}" type="text" class="form-control" id="stages" aria-describedby="stage" placeholder="">{{ stage.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
   <button type="submit" class="btn btn-primary mt-2">Создать</button>
 </form>
 {% endblock %}

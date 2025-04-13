@@ -1,48 +1,28 @@
 {% extends "/template.twig" %}
 {% block content %}
 <div class="container" data-pageid="tasks">
-<a href="/task/store" type="button" class="btn btn-primary">Создать задачу</a>
-{% if errorText %}<p class="alert alert-danger">{{ errorText }}</p>{% endif %}
-{% if successText %}<p class="alert alert-success">{{ successText }}</p>{% endif %}
+{% if isAdmin %}
+  <a href="/task/store" type="button" class="btn btn-primary mt-1 mb-1">Создать задачу</a>
+  <a href="/stage/store" type="button" class="btn btn-primary mt-1 mb-1">Создать колонку стадии</a>
+{% endif %}
+
+{% include 'partials/alert.twig' with {'message':message} %}
+
 <div class="container">
-
-    <div class="row  align-items-start mb-2">
-      <div class=" col">
-        <h3 >Новые</h3>
-      </div>
-          <div class=" col">
-        <h3 >В работе</h3>
-      </div>
-          <div class="crd col">
-        <h3 >Завершены</h3>
-      </div>
-    </div>
-
-  <div class="row align-items-start" >
-
-    <div id="new" class="col card" style="height: 100vh">
-
+  <div id="stagesArea" class="row align-items-start" >
+  {% for stage in stages %}
+    <div data-blockname="stages" id="{{stage.id}}" class="col h-100 min-vh-100 ui-state-default">
+    <h2>{{ stage.name }}</h2>
       {% for key, task in tasks %}
-        {% if task.status == 'new' %}
+        {% if task.stage_id == stage.id %}
           {{ _self.createCard(task) }}
         {% endif %}
       {% endfor %}
     </div>
-    <div id="progress" class="col card" style="height: 100vh">
-      {% for key, task in tasks %}
-        {% if task.status == 'progress' %}
-          {{ _self.createCard(task) }}
-        {% endif %}
+
       {% endfor %}
-    </div>
-    <div id="completed" class="col card" style="height: 100vh">
-      {% for key, task in tasks %}
-        {% if task.status == 'completed' %}
-          {{ _self.createCard(task) }}
-        {% endif %}
-      {% endfor %}
-    </div>
   </div>
+
 </div>
 </div>
 
